@@ -20,7 +20,7 @@ export default function Todos() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
 
-  const apiUrl = "http://localhost:4000";
+  const API_URL = "https://todoapp-backend-clean.onrender.com/";
 
   // Notification permission
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function Todos() {
 
   // Fetch all todos
   useEffect(() => {
-    fetch(apiUrl + "/todos")
+    fetch(API_URL + "/todos")
       .then((res) => res.json())
       .then((data) => setTodos(data))
       .catch(() => setError("Failed to fetch todos"));
@@ -65,7 +65,7 @@ export default function Todos() {
       return;
     }
 
-    fetch(apiUrl + "/todos", {
+    fetch(API_URL + "/todos", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -101,7 +101,7 @@ export default function Todos() {
     const currentTodo = todos.find((t) => t._id === id);
     if (!currentTodo) return;
 
-    fetch(`${apiUrl}/todos/${id}`, {
+    fetch(`${API_URL}/todos/${id}`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ status: !currentTodo.status }),
@@ -127,7 +127,7 @@ export default function Todos() {
                   t.dueDate?.startsWith(newDate.toISOString().split("T")[0])
               )
             ) {
-              fetch(apiUrl + "/todos", {
+              fetch(API_URL + "/todos", {
                 method: "POST",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify({
@@ -150,7 +150,7 @@ export default function Todos() {
 
   // Delete todo
   const deleteTodo = (id) => {
-    fetch(`${apiUrl}/todos/${id}`, { method: "DELETE" })
+    fetch(`${API_URL}/todos/${id}`, { method: "DELETE" })
       .then((res) => {
         if (res.status === 204) {
           setTodos(todos.filter((todo) => todo._id !== id));
@@ -162,7 +162,7 @@ export default function Todos() {
   // Update todo
   const updateTodo = async (id, updates) => {
     try {
-      const res = await fetch(`${apiUrl}/todos/${id}`, {
+      const res = await fetch(`${API_URL}/todos/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
