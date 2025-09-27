@@ -20,7 +20,7 @@ export default function Todos() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
 
-  const API_URL = "https://todoapp-backend-clean.onrender.com/";
+  const API_URL = "https://todoapp-backend-clean.onrender.com";
 
   // Notification permission
   useEffect(() => {
