@@ -98,55 +98,59 @@ export default function Todos() {
 
   // Toggle status
   const toggleStatus = (id) => {
-    const currentTodo = todos.find((t) => t._id === id);
-    if (!currentTodo) return;
+  const currentTodo = todos.find((t) => t._id === id);
+  if (!currentTodo) return;
 
-    fetch(`${API_URL}/todos/${id}`, {
-      method: "PATCH",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ status: !currentTodo.status }),
-    })
-      .then((res) => res.ok && res.json())
-      .then((updatedTodo) => {
-        if (updatedTodo) {
-          // ✅ Auto-create next recurring task even if not done
-          if (currentTodo.recurring !== "None") {
-            const newDate = new Date(currentTodo.dueDate);
-            if (currentTodo.recurring === "Daily")
-              newDate.setDate(newDate.getDate() + 1);
-            if (currentTodo.recurring === "Weekly")
-              newDate.setDate(newDate.getDate() + 7);
-            if (currentTodo.recurring === "Monthly")
-              newDate.setMonth(newDate.getMonth() + 1);
+  const newStatus = !currentTodo.status;
 
-            // Only add next recurring if not already exists for that date
-            if (
-              !todos.some(
-                (t) =>
-                  t.title === currentTodo.title &&
-                  t.dueDate?.startsWith(newDate.toISOString().split("T")[0])
-              )
-            ) {
-              fetch(API_URL + "/todos", {
-                method: "POST",
-                headers: { "content-type": "application/json" },
-                body: JSON.stringify({
-                  title: currentTodo.title,
-                  description: currentTodo.description,
-                  dueDate: newDate.toISOString().split("T")[0],
-                  priority: currentTodo.priority,
-                  recurring: currentTodo.recurring,
-                }),
-              })
-                .then((res) => res.ok && res.json())
-                .then((newTodo) => setTodos((prev) => [...prev, newTodo]));
-            }
+  fetch(`${API_URL}/todos/${id}`, {
+    method: "PATCH",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ status: newStatus }),
+  })
+    .then((res) => res.ok && res.json())
+    .then((updatedTodo) => {
+      if (updatedTodo) {
+        // ✅ Only create next recurring if marking as completed
+        if (newStatus && currentTodo.recurring !== "None") {
+          const newDate = new Date(currentTodo.dueDate);
+          if (currentTodo.recurring === "Daily")
+            newDate.setDate(newDate.getDate() + 1);
+          if (currentTodo.recurring === "Weekly")
+            newDate.setDate(newDate.getDate() + 7);
+          if (currentTodo.recurring === "Monthly")
+            newDate.setMonth(newDate.getMonth() + 1);
+
+          // Avoid duplicate recurring task
+          if (
+            !todos.some(
+              (t) =>
+                t.title === currentTodo.title &&
+                t.dueDate?.startsWith(newDate.toISOString().split("T")[0])
+            )
+          ) {
+            fetch(API_URL + "/todos", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify({
+                title: currentTodo.title,
+                description: currentTodo.description,
+                dueDate: newDate.toISOString().split("T")[0],
+                priority: currentTodo.priority,
+                recurring: currentTodo.recurring,
+              }),
+            })
+              .then((res) => res.ok && res.json())
+              .then((newTodo) => setTodos((prev) => [...prev, newTodo]));
           }
-          setTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo)));
         }
-      })
-      .catch(() => setError("Server not reachable"));
-  };
+
+        // ✅ Update status
+        setTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo)));
+      }
+    })
+    .catch(() => setError("Server not reachable"));
+};
 
   // Delete todo
   const deleteTodo = (id) => {
