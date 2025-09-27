@@ -11,3 +11,82 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.box{
+  width: 650px;
+  justify-content: center;
+}
+
+.fo{
+  border-color: blue;
+  padding: auto;
+  margin: 10px 10px 10px 10px;
+
+  
+  
+}
+.fo2{
+  border-color: rgb(255, 0, 247);
+  padding: auto;
+  width: 10px;
+  margin: 10px 10px 10px 10px;
+  
+  
+  
+}
+
+
+*{
+  background-color: blanchedalmond;
+}
+
+.but{
+  background-color: brown;
+  border-radius: 7px;
+  margin: 10px 10px 10px 10px;
+  
+}
+
+.headingca{
+  color: rgb(226, 224, 224);
+  background-color: brown;
+  cursor: pointer;
+  align-items: center;
+}
+
+
+.ca{
+  width: 700px;
+  border-radius:10px;
+  background-color: brown;
+  margin-left: 360px;
+  margin-top: 50px;
+}
+
+
+.bi{
+  align-items: center;
+  margin-left: 900px;
+  margin-top: 200px;
+}
+
+.App {
+
+  margin-top:180px;
+  margin-left: 30px;
+}
+
+.buttons{
+  margin-right: 5px;
+  margin-left: 430px;
+}
+
+.buttons1{
+  margin-right: 9px;
+
+}
+
+.todo-text{
+  font-size: small;
+  width: max-content;
+}
